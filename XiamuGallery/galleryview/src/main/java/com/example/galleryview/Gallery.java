@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by xiaobozheng on 9/5/2016.
+ * Created by xiaobozheng on 9/26/2016.
  */
-public class Gallery extends SmoothViewGroup {
+public class Gallery extends SmoothViewGroup{
 
     private List<String> mImgList = new ArrayList<>();
-    private ImageView[] mImageViews = new ImageView[2];
+    private ImageView[] mImgs = new ImageView[2];
     private View mShadowView;
 
     public Gallery(Context context, AttributeSet attrs) {
@@ -28,20 +28,24 @@ public class Gallery extends SmoothViewGroup {
         super(context, attrs, defStyleAttr);
     }
 
-    protected void initView(){
+    @Override
+    protected void initView() {
+
         if (mImgList.size() == 0){
             return;
         }
-        removeAllViews();
 
-        //去除margin值，两个ImageView加载前两张图
+        removeAllViews();
         MarginLayoutParams params = new MarginLayoutParams(mWidth, mHeight);
-        for (int i = 0; i < mImageViews.length; i++){
-            mImageViews[i] = new ImageView(getContext());
-            addViewInLayout(mImageViews[i], -1, params, true);
+        //两个ImageView加载前两张图
+        for (int i = 0; i < mImgs.length; i++){
+            mImgs[i] = new ImageView(getContext());
+            //为了requestLayout的绝对控制
+            addViewInLayout(mImgs[i], -1, params, true);
+            Glide.with(getContext()).load(getImgPath(i)).centerCrop().into(mImgs[i]);
         }
 
-        //将阴影部分添加到里面
+        //创建阴影View
         mShadowView = new View(getContext());
         mShadowView.setBackgroundColor(Color.parseColor("#60000000"));
         mShadowView.setAlpha(0);
@@ -49,7 +53,7 @@ public class Gallery extends SmoothViewGroup {
     }
 
     /**
-     * 通过控制两个ImageView和他们的marginTop，在onLayout中实现
+     * 使用一定的规律交替控制两个ImageView和它们的marginTop
      * @param changed
      * @param l
      * @param t
@@ -58,19 +62,19 @@ public class Gallery extends SmoothViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
         int cCount = getChildCount();
         MarginLayoutParams cParams;
-
-        for(int i = 0; i < cCount; i++){
+        for (int i = 0; i < cCount; i++){
+            //得到子View
             View childView = getChildAt(i);
             cParams = (MarginLayoutParams) childView.getLayoutParams();
 
-            int cl = 0,ct = 0, cr, cb;
-            //判断是否为奇数
+            int cl = 0, ct = 0, cr, cb;
+
             if (isOddCircle()){
                 if (i == 1){
                     cl = cParams.leftMargin;
-                    //显示mHeight的高度
                     ct = mSmoothMarginTop + mHeight;
                 } else if (i == 0){
                     cl = cParams.leftMargin;
@@ -80,17 +84,18 @@ public class Gallery extends SmoothViewGroup {
                 if (i == 0){
                     cl = cParams.leftMargin;
                     ct = mSmoothMarginTop + mHeight;
-                } else if (i == 1){
+                } else {
                     cl = cParams.leftMargin;
                     ct = mSmoothMarginTop;
                 }
             }
 
             //控制shadowView
-            if (i == 2){
+            if( i == 2){
                 cl = cParams.leftMargin;
                 ct = mSmoothMarginTop + mHeight;
             }
+
             cr = cl + mWidth;
             cb = ct + mHeight;
             childView.layout(cl, ct, cr, cb);
@@ -98,24 +103,28 @@ public class Gallery extends SmoothViewGroup {
     }
 
     @Override
+    protected void doAnim() {
+        //动画进行时
+        mShadowView.setAlpha(((1 - (-mSmoothMarginTop)/ (float)mHeight)));
+        requestLayout();
+    }
+
+    @Override
     protected void doAnimFinish() {
-        if (isOddCircle()){
-            Glide.with(getContext()).load(getImgPath(mRepeatTimes + 1)).centerCrop().into(mImageViews[0]);
+        if (isOddCircle()) {
+            Glide.with(getContext()).load(getImgPath(mRepeatTimes + 1)).centerCrop().into(mImgs[0]);
         } else {
-            Glide.with(getContext()).load(getImgPath(mRepeatTimes + 1)).centerCrop().into(mImageViews[1]);
+            Glide.with(getContext()).load(getImgPath(mRepeatTimes + 1)).centerCrop().into(mImgs[1]);
         }
         mShadowView.setAlpha(0);
     }
 
-    @Override
-    protected void doAnim() {
-        mShadowView.setAlpha((1 - (-mSmoothMarginTop) / (float)mHeight));
-        //开启动画不断刷新
-        requestLayout();
+    public void setImgList(List<String> imgList){
+        mImgList = imgList;
+        initView();
     }
-
     /**
-     * 获取图片地址
+     * 为了实现循环行动
      * @param position
      * @return
      */

@@ -1,1 +1,1 @@
-include ':app', ':galleryview'
+include ':app', ':Galleryview'

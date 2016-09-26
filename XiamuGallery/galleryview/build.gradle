@@ -1,11 +1,12 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "com.example.galleryview"
+       // 这个报错主要原因是因为依赖库之前是一个独立的应用，需要把它的设置为库，而不是应用
+        //applicationId "com.example.galleryview"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1

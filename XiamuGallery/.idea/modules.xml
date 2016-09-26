@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Galleryview/Galleryview.iml" filepath="$PROJECT_DIR$/Galleryview/Galleryview.iml" />
       <module fileurl="file://$PROJECT_DIR$/XiamuGallery.iml" filepath="$PROJECT_DIR$/XiamuGallery.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/galleryview/galleryview.iml" filepath="$PROJECT_DIR$/galleryview/galleryview.iml" />
     </modules>
   </component>
 </project>
