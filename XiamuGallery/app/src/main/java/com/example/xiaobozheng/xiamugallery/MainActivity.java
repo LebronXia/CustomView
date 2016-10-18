@@ -2,6 +2,7 @@ package com.example.xiaobozheng.xiamugallery;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.galleryview.Gallery;
@@ -16,14 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] mImgs = new String[]{"http://awb.img1.xmtbang.com/wechatmsg2015/article201505/20150525/thumb/9b65bb01da504a12807f50324fe01e3b.jpg",
 //            "http://img.gaonengfun.com/attach/img/2015/12/11/1449820178464698.gif",
-            "http://p3.gexing.com/G1/M00/B0/E2/rBACE1IaEE2iXDJcAAAY2UyOZcc821_200x200_3.jpg",
-            "http://img4.imgtn.bdimg.com/it/u=665141257,1340555319&fm=21&gp=0.jpg"};
+            "http://ww1.sinaimg.cn/large/610dc034jw1f867mvc6qjj20u00u0wh7.jpg",
+            "http://ww3.sinaimg.cn/large/610dc034jw1f837uocox8j20f00mggoo.jpg"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d("MainActivity" ,  "哈哈哈哈哈");
         mGalleries.add((Gallery) findViewById(R.id.gallery0));
         mGalleries.add((Gallery) findViewById(R.id.gallery1));
         mGalleries.add((Gallery) findViewById(R.id.gallery2));
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             for (int j = 0; j < mImgs.length; j++){
                 mImgList.add(mImgs[j]);
             }
+            Log.d("MainActivity" , mImgList.size() + "mImgList的数量");
             mGalleries.get(i).setImgList(mImgList);
         }
     }
