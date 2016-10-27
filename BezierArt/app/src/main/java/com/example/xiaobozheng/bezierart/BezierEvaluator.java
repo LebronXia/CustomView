@@ -17,6 +17,7 @@ public class BezierEvaluator implements TypeEvaluator<PointF>{
     public BezierEvaluator(PointF controlPoint){
         this.mControlPoint = controlPoint;
     }
+
     @Override
     public PointF evaluate(float t, PointF startValue, PointF endValue) {
         return BezierUtil.CalculateBezierPointForQuadratic(t, startValue, mControlPoint, endValue);

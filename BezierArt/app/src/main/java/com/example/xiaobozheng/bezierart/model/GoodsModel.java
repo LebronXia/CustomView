@@ -13,7 +13,7 @@ public class GoodsModel {
         return mGoodsBitmap;
     }
 
-    public void setMGoodsBitmap(Bitmap bitmap){
-        this.mGoodsBitmap = mGoodsBitmap;
+    public void setmGoodsBitmap(Bitmap bitmap){
+        this.mGoodsBitmap = bitmap;
     }
 }

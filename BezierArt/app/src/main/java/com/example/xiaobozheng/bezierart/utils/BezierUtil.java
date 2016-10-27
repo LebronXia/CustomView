@@ -8,7 +8,6 @@ import android.graphics.PointF;
  * Created by xiaobozheng on 10/26/2016.
  */
 public class BezierUtil {
-
     /**
      * 二阶贝塞尔曲线公式
      * B(t) = (1 - t)^2 * P0 + 2t * (1 - t) * P1 + t^2 * P2, t ∈ [0,1]
@@ -45,5 +44,4 @@ public class BezierUtil {
         point.y = p0.y * temp * temp * temp + 3 * p1.y * t * temp * temp + 3 * p2.y * t * t * temp + p3.y * t * t * t;
         return point;
     }
-
 }
