@@ -68,6 +68,7 @@ public class ViewpagerIndicator extends LinearLayout{
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewPagerIndicator);
 
         mTabVisisbleCount = a.getInt(R.styleable.ViewPagerIndicator_item_count, COUNT_DEGAULT_TAB);
+
         if (mTabVisisbleCount < 0 )
             mTabVisisbleCount = COUNT_DEGAULT_TAB;
         a.recycle();
@@ -81,6 +82,7 @@ public class ViewpagerIndicator extends LinearLayout{
     }
 
     /**
+     * 当View中所有的子控件均被映射成xml后触发
      * 设置布局中View的一些必要属性
      */
     @Override
@@ -103,6 +105,7 @@ public class ViewpagerIndicator extends LinearLayout{
     }
 
     /**
+     * 当view的大小发生变化时触发
      * 设值，进行初始化，和初始化三角形的宽度
      * @param w
      * @param h
@@ -120,7 +123,7 @@ public class ViewpagerIndicator extends LinearLayout{
 
         //画出三角形
         initTriangle();
-        //偏移量为显示Tab的数量 ，？？？？？？，使其位于中间
+        //初始化的偏移量 ，使三角形位于每个Tab中间的位置
         mInitTranslationX = getWidth() / mTabVisisbleCount / 2 - mTriangleWidth/2;
 
     }
@@ -148,7 +151,7 @@ public class ViewpagerIndicator extends LinearLayout{
     protected void dispatchDraw(Canvas canvas) {
 
         canvas.save();
-        //这一步在绘制画笔,????????
+        //这一步在绘制画笔,  初始化偏移量加上手指滑动的偏移量
         canvas.translate(mInitTranslationX + mTranslationX, getHeight() + 1);
         canvas.drawPath(mPath, mPaint);
         canvas.restore();
@@ -161,8 +164,9 @@ public class ViewpagerIndicator extends LinearLayout{
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                //滚动,让三角形也跟着滑动
+                //滚动,让三角形也跟着滑动，标题栏滑动
                 scroll(position, positionOffset);
+
                 // 回调
                 if (onPageChangeListener != null)
                 {
@@ -227,16 +231,20 @@ public class ViewpagerIndicator extends LinearLayout{
      */
     public void scroll(int position, float offset){
 
-        //不断改变偏移量
+        //不断改变偏移量，跟局offse在变化，  offset的值在0~1之间
         mTranslationX = getWidth() / mTabVisisbleCount * (position + offset);
+
+        //一个tab的宽度
         int tabWidth = getScreenWidth() / mTabVisisbleCount;
 
         // 容器滚动，当移动到倒数最后一个的时候，开始滚动
+        //滑动到最后一个的时候，留的空间多余，可以让他在滑动到倒数第二个的时候，禁止滑动，而让三角形滑到最后一个的效果
         if (offset > 0 && position >= (mTabVisisbleCount - 2)
-                && getChildCount() > mTabVisisbleCount)
+                && getChildCount() > mTabVisisbleCount && position < (getChildCount() - 2))
         {
             if (mTabVisisbleCount != 1)
             {
+                //控制标题栏滑到倒数第二个
                 this.scrollTo((position - (mTabVisisbleCount - 2)) * tabWidth
                         + (int) (tabWidth * offset), 0);
             } else
